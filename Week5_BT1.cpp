@@ -1,34 +1,35 @@
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
-void swap(int &a,int &b )
-{
-      int temp = a;
-      a = b;
-      b = temp;
-}
 
-void selectionSort(int arr[], int n)
-{
-    int i, j, min_idx; 
-    for (i = 0; i < n - 1; i++)
-    { 
-        min_idx = i;
-        for (j = i + 1; j < n; j++)
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-
-        swap(arr[min_idx], arr[i]);
-        for (int i = 0; i < n; i++)
-        cout << arr[i] << " ";
-        cout << endl;
+void sortColors(vector<int>& colors) {
+    int low = 0, mid = 0, high = colors.size() - 1;
+    
+    while (mid <= high) {
+        if (colors[mid] == 0) { // màu đỏ
+            swap(colors[low], colors[mid]);
+            low++;
+            mid++;
+        }
+        else if (colors[mid] == 1) { // màu trắng
+            mid++;
+        }
+        else { // màu xanh
+            swap(colors[mid], colors[high]);
+            high--;
+        }
     }
 }
 
-
-int main()
-{
-    int A[12]={240,73,101,21,13,25,11,37,89,30,15,51};
-    cout << "Selection sort:" << endl;
-    selectionSort(A, 12);
-
+int main() {
+    vector<int> colors = {2, 0, 2, 0, 0, 1, 0, 2, 1};
+    sortColors(colors);
+    for (int color : colors) {
+        if (color == 0) cout << "red ";
+        else if (color == 1) cout << "white ";
+        else cout << "blue ";
+    }
+    
+    return 0;
 }

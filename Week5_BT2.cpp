@@ -68,21 +68,17 @@ int main() {
     int N = 100;
     int blum_numbers[100];
     int count = generate_blum_numbers(blum_numbers, N);
-    
     printf("Mảng số Blum nhỏ hơn %d: ", N);
     for (int i = 0; i < count; i++) {
         printf("%d ", blum_numbers[i]);
     }
     printf("\n");
-    
     int M = 33;
     if (check_blum_existence(M, blum_numbers, count)) {
         printf("Số Blum %d tồn tại trong mảng.\n", M);
     } else {
         printf("Số Blum %d không tồn tại trong mảng.\n", M);
     }
-    
     find_blum_pairs(blum_numbers, count, N);
-    
     return 0;
 }

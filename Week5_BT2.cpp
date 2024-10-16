@@ -1,116 +1,88 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
-#include <algorithm>
-using namespace std;
+#include <stdio.h>
+#include <math.h>
 
 // Hàm kiểm tra số nguyên tố
-bool isPrime(int n) {
-    if (n <= 1) return false;
-    if (n == 2 || n == 3) return true;
-    if (n % 2 == 0 || n % 3 == 0) return false;
-    for (int i = 5; i * i <= n; i += 6) {
-        if (n % i == 0 || n % (i + 2) == 0) return false;
+int is_prime(int n) {
+    if (n <= 1) return 0;
+    for (int i = 2; i <= sqrt(n); i++) {
+        if (n % i == 0) return 0;
     }
-    return true;
+    return 1;
 }
 
-// Sàng Eratosthenes để tìm các số nguyên tố
-vector<int> sieve(int N) {
-    vector<bool> is_prime(N+1, true);
-    vector<int> primes;
-    is_prime[0] = is_prime[1] = false;
-    
-    for (int i = 2; i <= N; ++i) {
-        if (is_prime[i]) {
-            primes.push_back(i);
-            for (int j = i * i; j <= N; j += i) {
-                is_prime[j] = false;
+// Hàm kiểm tra số Blum
+int is_blum_number(int n) {
+    for (int i = 2; i <= sqrt(n); i++) {
+        if (n % i == 0 && is_prime(i) && (i % 4 == 3)) {
+            int complement = n / i;
+            if (is_prime(complement) && (complement % 4 == 3)) {
+                return 1;
             }
         }
     }
-    return primes;
+    return 0;
 }
 
-// Tạo danh sách các số Blum
-vector<int> generateBlumNumbers(int N) {
-    vector<int> primes = sieve(N);
-    vector<int> blumNumbers;
-    
-    // Chọn các số nguyên tố dạng 4k+3
-    vector<int> blumPrimes;
-    for (int prime : primes) {
-        if (prime % 4 == 3) {
-            blumPrimes.push_back(prime);
+// Tạo mảng số Blum nhỏ hơn N
+int generate_blum_numbers(int blum_numbers[], int N) {
+    int count = 0;
+    for (int i = 6; i < N; i++) {
+        if (is_blum_number(i)) {
+            blum_numbers[count++] = i;
         }
     }
-    
-    // Tạo các số Blum từ tích của 2 số nguyên tố dạng 4k+3
-    for (size_t i = 0; i < blumPrimes.size(); ++i) {
-        for (size_t j = i; j < blumPrimes.size(); ++j) {
-            int blum = blumPrimes[i] * blumPrimes[j];
-            if (blum < N) {
-                blumNumbers.push_back(blum);
+    return count;
+}
+
+// Tìm cặp số Blum có tổng cũng là số Blum
+void find_blum_pairs(int blum_numbers[], int count, int N) {
+    printf("Các cặp số Blum có tổng cũng là số Blum: ");
+    int found = 0;
+    for (int i = 0; i < count; i++) {
+        for (int j = i + 1; j < count; j++) {
+            int sum = blum_numbers[i] + blum_numbers[j];
+            if (sum < N && is_blum_number(sum)) {
+                printf("(%d, %d) ", blum_numbers[i], blum_numbers[j]);
+                found = 1;
             }
         }
     }
-    
-    // Loại bỏ các số Blum trùng lặp và sắp xếp danh sách
-    sort(blumNumbers.begin(), blumNumbers.end());
-    blumNumbers.erase(unique(blumNumbers.begin(), blumNumbers.end()), blumNumbers.end());
-    
-    return blumNumbers;
+    if (!found) {
+        printf("Không có cặp nào.\n");
+    } else {
+        printf("\n");
+    }
 }
 
-// Tìm tất cả các cặp số Blum có tổng cũng là số Blum
-vector<pair<int, int>> findBlumPairs(const vector<int>& blumNumbers, int N) {
-    vector<pair<int, int>> blumPairs;
-    for (size_t i = 0; i < blumNumbers.size(); ++i) {
-        for (size_t j = i; j < blumNumbers.size(); ++j) {
-            int sum = blumNumbers[i] + blumNumbers[j];
-            if (sum < N && binary_search(blumNumbers.begin(), blumNumbers.end(), sum)) {
-                blumPairs.emplace_back(blumNumbers[i], blumNumbers[j]);
-            }
+// Kiểm tra sự tồn tại của số Blum M trong dãy
+int check_blum_existence(int M, int blum_numbers[], int count) {
+    for (int i = 0; i < count; i++) {
+        if (blum_numbers[i] == M) {
+            return 1;
         }
     }
-    return blumPairs;
-}
-
-// Kiểm tra số Blum M có tồn tại trong danh sách không
-bool isBlumNumber(int M, const vector<int>& blumNumbers) {
-    return binary_search(blumNumbers.begin(), blumNumbers.end(), M);
+    return 0;
 }
 
 int main() {
-    int N, M;
-    cout << "Nhap gia tri N: ";
-    cin >> N;
-    cout << "Nhap so Blum can kiem tra M: ";
-    cin >> M;
-
-    // Tạo danh sách các số Blum nhỏ hơn N
-    vector<int> blumNumbers = generateBlumNumbers(N);
-
-    // In ra danh sách các số Blum
-    cout << "Danh sach cac so Blum nho hon " << N << ":\n";
-    for (int blum : blumNumbers) {
-        cout << blum << " ";
+    int N = 100;
+    int blum_numbers[100];
+    int count = generate_blum_numbers(blum_numbers, N);
+    
+    printf("Mảng số Blum nhỏ hơn %d: ", N);
+    for (int i = 0; i < count; i++) {
+        printf("%d ", blum_numbers[i]);
     }
-    cout << endl;
-
-    // Tìm các cặp số Blum có tổng cũng là số Blum
-    vector<pair<int, int>> blumPairs = findBlumPairs(blumNumbers, N);
-    cout << "Cac cap so cung co the la so Blum:\n";
-    for (const auto& p : blumPairs) {
-        cout << "(" << p.first << ", " << p.second << ")\n";
-    }
-
-    // Kiểm tra số Blum M có tồn tại không
-    if (isBlumNumber(M, blumNumbers)) {
-        cout << "So " << M << " la mot so Blum.\n";
+    printf("\n");
+    
+    int M = 33;
+    if (check_blum_existence(M, blum_numbers, count)) {
+        printf("Số Blum %d tồn tại trong mảng.\n", M);
     } else {
-        cout << "So " << M << " khong phai la so Blum.\n";
+        printf("Số Blum %d không tồn tại trong mảng.\n", M);
     }
-
+    
+    find_blum_pairs(blum_numbers, count, N);
+    
     return 0;
 }

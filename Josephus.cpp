@@ -44,6 +44,7 @@ int josephus(Node *head, int M) {
             delete prev;  // Xóa node bị loại
         }
         int winner = current->data;
+        cout << "Nguoi chien thang la nguoi choi so " << winner << endl;
         delete current;  // Xóa người chơi cuối cùng
         return winner;
     }
@@ -66,6 +67,7 @@ int josephus(Node *head, int M) {
     }
     
     int winner = current->data;
+    cout << "Nguoi chien thang la nguoi choi so " << winner << endl;
     delete current;  // Xóa người chơi cuối cùng
     return winner;
 }
@@ -84,8 +86,5 @@ int main() {
     Node *head = createCircularList(N);
     int winner = josephus(head, M);
 
-    if (winner != -1) { // Kiểm tra người chiến thắng hợp lệ
-        cout << "Nguoi chien thang la nguoi choi so " << winner << endl;
-    }
     return 0;
 }

@@ -68,7 +68,6 @@ void taoDT(ListDT& lDT) {
 void inDT(const ListDT& lDT) {
     Node* p = lDT.first;     // Bắt đầu từ đầu danh sách
     bool firstTerm = true;   // Biến kiểm tra đơn thức đầu tiên
-    cout << "f(x) = ";
     while (p != nullptr) {
         if (!firstTerm && p->heso > 0) cout << " + "; // In dấu cộng cho các đơn thức tiếp theo
         if (p->somu == 0) {    // Nếu số mũ là 0, chỉ in hệ số
@@ -84,8 +83,48 @@ void inDT(const ListDT& lDT) {
     cout << endl;
 }
 
+// Cộng hai đa thức và trả về đa thức tổng
+ListDT congDT(const ListDT& DT1, const ListDT& DT2) {
+    ListDT sum;
+    initDT(sum);  // Khởi tạo đa thức tổng
+
+    Node* p1 = DT1.first;
+    Node* p2 = DT2.first;
+
+    while (p1 != nullptr && p2 != nullptr) {
+        if (p1->somu == p2->somu) {
+            // Nếu số mũ bằng nhau, cộng hệ số
+            attachNode(sum, p1->heso + p2->heso, p1->somu);
+            p1 = p1->link;
+            p2 = p2->link;
+        } else if (p1->somu > p2->somu) {
+            // Thêm đơn thức của DT1 vào tổng nếu số mũ lớn hơn
+            attachNode(sum, p1->heso, p1->somu);
+            p1 = p1->link;
+        } else {
+            // Thêm đơn thức của DT2 vào tổng nếu số mũ lớn hơn
+            attachNode(sum, p2->heso, p2->somu);
+            p2 = p2->link;
+        }
+    }
+
+    // Thêm các đơn thức còn lại của DT1 vào tổng
+    while (p1 != nullptr) {
+        attachNode(sum, p1->heso, p1->somu);
+        p1 = p1->link;
+    }
+
+    // Thêm các đơn thức còn lại của DT2 vào tổng
+    while (p2 != nullptr) {
+        attachNode(sum, p2->heso, p2->somu);
+        p2 = p2->link;
+    }
+
+    return sum;
+}
+
 int main() {
-    ListDT DT1, DT2;     
+    ListDT DT1, DT2, TongDT;     
     initDT(DT1);        
     initDT(DT2);      
     
@@ -93,11 +132,15 @@ int main() {
     taoDT(DT1);
     cout << "Nhap da thuc g(x):\n";
     taoDT(DT2);
-
+    
     cout << "\nDa thuc f(x): ";
     inDT(DT1);
     cout << "\nDa thuc g(x): ";
     inDT(DT2);
+
+    TongDT = congDT(DT1, DT2);
+    cout << "\nTong da thuc f(x) + g(x): ";
+    inDT(TongDT);
 
     return 0;
 }

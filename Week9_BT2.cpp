@@ -16,7 +16,7 @@ private:
 public:
     WordList() : head(nullptr), tail(nullptr) {}
 
-    // Hàm thêm từ vào cuối danh sách
+    // Them tu vao cuoi danh sach
     void addWord(const std::string& word) {
         WordNode* newNode = new WordNode{word, nullptr};
         if (!head) {  
@@ -27,7 +27,7 @@ public:
         }
     }
 
-    // Hàm tìm từ xuất hiện nhiều nhất
+    // Tim tu xuat hien nhieu nhat
     std::string findMostFrequentWord() {
         std::unordered_map<std::string, int> wordCount;
         WordNode* current = head;
@@ -47,7 +47,7 @@ public:
         return mostFrequent;
     }
 
-    // Hàm loại bỏ từ láy
+    // Bo tu lay
     void removeReduplication() {
         WordNode* current = head;
         WordNode* prev = nullptr;
@@ -63,7 +63,7 @@ public:
         }
     }
 
-    // Hàm đếm số từ vựng khác nhau
+    // Dem so luong tu khac nhau
     int countUniqueWords() {
         std::unordered_map<std::string, bool> uniqueWords;
         WordNode* current = head;
@@ -74,7 +74,7 @@ public:
         return uniqueWords.size();
     }
 
-    // Hàm hiển thị các từ theo đúng thứ tự nhập
+    // Hien thi cau
     void displayWords() const {
         WordNode* current = head;
         while (current) {

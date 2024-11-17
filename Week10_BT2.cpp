@@ -57,7 +57,7 @@ public:
             current = current->next;
         }
 
-        if (!prevMin) {  // Delete from start
+        if (!prevMin) {  //Ko co thi xoa luon tep dau tien
             xoaDau();
         } else {
             prevMin->next = minFile->next;

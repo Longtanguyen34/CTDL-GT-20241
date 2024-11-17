@@ -100,7 +100,7 @@ int main() {
     folder.hienThiTep();
 
     folder.xoaTepNhoNhatVaCuNhat();
-    std::cout << "Danh sach sau khi xoa tep co kich thuoc nho nhat va thoi gian luu lau nhat:\n";
+    std::cout << "Danh sach sau khi xoa tep co kich thuoc nho nhat va thoi gian luu lau nhat sau do sap xep lai:\n";
     folder.hienThiTep();
 
     return 0;

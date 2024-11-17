@@ -91,6 +91,10 @@ int main() {
     folder.themTep("FileB", 50, 1100);
     folder.themTep("FileC", 50, 1000);
     folder.themTep("FileD", 200, 900);
+    folder.themTep("FileE", 500, 900);
+    folder.themTep("FileF", 1200, 2900);
+    folder.themTep("FileG", 20, 900);
+    folder.themTep("FileH", 210, 800);
 
     std::cout << "Danh sach tep ban dau:\n";
     folder.hienThiTep();
